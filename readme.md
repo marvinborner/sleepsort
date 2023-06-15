@@ -1,8 +1,18 @@
 # Sleepsort
 
-> efficiently sleeping
+> efficiently sleeping with (sub-)nanosecond precision and asm threads
 
-## Installation
+## Dependencies
 
-    make
-    ./sort
+- ed
+- nasm
+- gcc
+- make
+
+## Usage
+
+``` bash
+ed sort.asm # edit array and choose coolsleep/boringsleep
+make
+./sort
+```
