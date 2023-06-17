@@ -1,4 +1,5 @@
 ; Copyright (c) 2023 Marvin Borner
+%include "config.asm"
 
 global main
 extern printf
@@ -27,21 +28,11 @@ end:
 	mov     rdi, 0
 	syscall ; exit
 
-; this works sometimes (if numbers are good)
-; uses busy loop
-coolsleep:
-	mov     rax, 0x4242424
-	mov     rcx, rsi
-	mul     rcx
-.loop:
-	dec     rax
-	jnz     .loop
-	ret
+%if USE_SYSCALL
 
-; this works on most normal CPUs (if numbers are good)
 ; uses nanosleep syscall
-boringsleep:
-	mov     rax, 0x424242
+sleep:
+	mov     rax, TIMEOUT ; 0x424242
 	mov     rcx, rsi
 	mul     rcx
 	push    qword rax ; ns
@@ -53,9 +44,23 @@ boringsleep:
 	add     rsp, 16
 	ret
 
+%else
+
+; uses busy loop
+sleep:
+	mov     rax, TIMEOUT ; 0x4242424
+	mov     rcx, rsi
+	mul     rcx
+.loop:
+	dec     rax
+	jnz     .loop
+	ret
+
+%endif
+
 print:
 	push    rsi
-	call    boringsleep ; or coolsleep
+	call    sleep
 	pop     rsi
 	mov     rdi, format
 	xor     rax, rax
