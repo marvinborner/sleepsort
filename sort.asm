@@ -19,6 +19,7 @@ loop:
 	jnz     loop
 
 end:
+	call    thread_wait_all
 	pop     rbp
 	mov     rax, 0x3c
 	mov     rdi, 0
@@ -76,6 +77,19 @@ thread_run:
 	pop     rax
 	je      child
 	mov     rax, r10
+	ret
+
+thread_wait_all:
+	sub     rsp, 4
+	mov     rdi, -1
+	mov     rax, 0x3d
+	mov     rsi, rsp
+	xor     rdx, rdx
+	xor     r10, r10
+	syscall ; wait4
+	add     rsp, 4
+	cmp     rax, -10 ; idk why
+	jne     thread_wait_all
 	ret
 
 child:
