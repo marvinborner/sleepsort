@@ -32,7 +32,7 @@ end:
 
 ; uses nanosleep syscall
 sleep:
-	mov     rax, TIMEOUT ; 0x424242
+	mov     rax, TIMEOUT
 	mov     rcx, rsi
 	mul     rcx
 	push    qword rax ; ns
@@ -48,7 +48,7 @@ sleep:
 
 ; uses busy loop
 sleep:
-	mov     rax, TIMEOUT ; 0x4242424
+	mov     rax, TIMEOUT
 	mov     rcx, rsi
 	mul     rcx
 .loop:

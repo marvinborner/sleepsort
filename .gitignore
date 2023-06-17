@@ -3,3 +3,5 @@ sort.o
 data.o
 csort.o
 csort
+
+*.asme
